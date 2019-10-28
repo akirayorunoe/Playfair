@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,6 +67,23 @@ namespace PlayFair
                     oldBtn = btn;
                 }
                 offset++;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if(openFileDialog1.ShowDialog()==System.Windows.Forms.DialogResult.OK)
+            {
+                string temp = openFileDialog1.FileName;
+                textBox1.Text=File.ReadAllText(temp);
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                File.WriteAllText(saveFileDialog1.FileName, textBox2.Text);
             }
         }
     }
