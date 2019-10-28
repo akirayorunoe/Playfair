@@ -124,6 +124,7 @@
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(280, 20);
             this.textBox3.TabIndex = 14;
+            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
             // 
             // panel1
             // 
@@ -163,7 +164,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(59, 29);
+            this.textBox2.Location = new System.Drawing.Point(54, 19);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
@@ -174,7 +175,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(25, 44);
+            this.label4.Location = new System.Drawing.Point(20, 34);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(28, 13);
             this.label4.TabIndex = 6;
@@ -226,7 +227,6 @@
             this.MinimumSize = new System.Drawing.Size(438, 588);
             this.Name = "Form1";
             this.Text = "PlayFair";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
