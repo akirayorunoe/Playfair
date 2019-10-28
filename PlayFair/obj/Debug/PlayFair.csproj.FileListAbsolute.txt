@@ -1,0 +1,9 @@
+C:\Users\hoang\Desktop\PlayFair\PlayFair\bin\Debug\PlayFair.exe.config
+C:\Users\hoang\Desktop\PlayFair\PlayFair\bin\Debug\PlayFair.exe
+C:\Users\hoang\Desktop\PlayFair\PlayFair\bin\Debug\PlayFair.pdb
+C:\Users\hoang\Desktop\PlayFair\PlayFair\obj\Debug\PlayFair.csprojResolveAssemblyReference.cache
+C:\Users\hoang\Desktop\PlayFair\PlayFair\obj\Debug\PlayFair.Form1.resources
+C:\Users\hoang\Desktop\PlayFair\PlayFair\obj\Debug\PlayFair.Properties.Resources.resources
+C:\Users\hoang\Desktop\PlayFair\PlayFair\obj\Debug\PlayFair.csproj.GenerateResource.Cache
+C:\Users\hoang\Desktop\PlayFair\PlayFair\obj\Debug\PlayFair.exe
+C:\Users\hoang\Desktop\PlayFair\PlayFair\obj\Debug\PlayFair.pdb
