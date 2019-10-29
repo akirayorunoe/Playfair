@@ -25,6 +25,7 @@ namespace PlayFair
             //check khi onclick radio btn
             radioButton1.CheckedChanged += new EventHandler(radioButtons_CheckedChanged);
             radioButton2.CheckedChanged += new EventHandler(radioButtons_CheckedChanged);
+            //string s="";
             //for(int i=0;i<5;i++)
             //{
             //    for(int j=0;j<5;j++)
@@ -47,33 +48,35 @@ namespace PlayFair
             }
             List<char> distinct = list.Distinct().ToList();
             kq = string.Join("", distinct.ToArray());
-            MessageBox.Show(kq);
+           // MessageBox.Show(kq);
             return kq;
         }
         void replaceOnMatrix(int x,string a)
         {
-            distinctString(a);
-            //int size = 0;
-            //int h = 0, t = 0;
-            //while (size <= a.Length)
-            //{
-            //    for (int i = 0; i < x; i++)
-            //    {
-            //        for (int j = 0; j < x; j++)
-            //        {
-            //            if (t >= x) { t = 0; h++; }
-            //            string temp1 = a[size].ToString();
-            //            string temp2 = arrayMatrix[i, j].Text;
-            //            MessageBox.Show(temp1+","+temp2);
-            //            if (temp1==temp2)
-            //            {
-            //                tempString += arrayMatrix[i, j].Text;
-            //                arrayMatrix[h, t++].Text = tempString;
-            //                size++;
-            //            }
-            //        }
-            //    }
-            //}
+            a=distinctString(a);
+            Button[,] arrayMatrixClone = new Button[6,6];
+            Array.Copy(arrayMatrix, 0, arrayMatrixClone, 0, arrayMatrix.Length);
+            int size = 0;
+            int h = 0, t = 0;
+            while (size <= a.Length)
+            {
+                for (int i = 0; i < x; i++)
+                {
+                    for (int j = 0; j < x; j++)
+                    {
+                        if (t >= x) { t = 0; h++; }
+                        string temp1 = a[size].ToString();
+                        string temp2 = arrayMatrix[i, j].Text;
+                        MessageBox.Show(a+","+temp1 + "," + temp2);
+                        if (temp1.Equals(temp2))
+                        {
+                            arrayMatrixClone[h, t++].Text = temp1;
+                            size++;
+                        }
+                    }
+                }
+            }
+
         }
         private void radioButtons_CheckedChanged(object sender, EventArgs e)
         {
