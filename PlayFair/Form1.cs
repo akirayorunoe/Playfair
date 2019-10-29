@@ -14,6 +14,9 @@ namespace PlayFair
 {
     public partial class Form1 : Form
     {
+        int check=5;
+        string tempString="";
+        Button[,] arrayMatrix = new Button[6, 6];
         public Form1()
         {
             InitializeComponent();
@@ -22,8 +25,56 @@ namespace PlayFair
             //check khi onclick radio btn
             radioButton1.CheckedChanged += new EventHandler(radioButtons_CheckedChanged);
             radioButton2.CheckedChanged += new EventHandler(radioButtons_CheckedChanged);
+            //for(int i=0;i<5;i++)
+            //{
+            //    for(int j=0;j<5;j++)
+            //    {
+            //        s += arrayMatrix[i, j].Text.ToString();
+            //    }
+            //    s += "\n";
+            //}
+            //MessageBox.Show(s);
         }
+        string distinctString(string a)
+        {
+            int cNum = 0;
+            string kq = "";
+            List<char> list = new List<char>();
+            foreach (int c in a)
+            {
+                list.Add(a[cNum++]);
 
+            }
+            List<char> distinct = list.Distinct().ToList();
+            kq = string.Join("", distinct.ToArray());
+            MessageBox.Show(kq);
+            return kq;
+        }
+        void replaceOnMatrix(int x,string a)
+        {
+            distinctString(a);
+            //int size = 0;
+            //int h = 0, t = 0;
+            //while (size <= a.Length)
+            //{
+            //    for (int i = 0; i < x; i++)
+            //    {
+            //        for (int j = 0; j < x; j++)
+            //        {
+            //            if (t >= x) { t = 0; h++; }
+            //            string temp1 = a[size].ToString();
+            //            string temp2 = arrayMatrix[i, j].Text;
+            //            MessageBox.Show(temp1+","+temp2);
+            //            if (temp1==temp2)
+            //            {
+            //                tempString += arrayMatrix[i, j].Text;
+            //                arrayMatrix[h, t++].Text = tempString;
+            //                size++;
+            //            }
+            //        }
+            //    }
+            //}
+        }
         private void radioButtons_CheckedChanged(object sender, EventArgs e)
         {
             // Do stuff only if the radio button is checked (or the action will run twice).
@@ -35,6 +86,7 @@ namespace PlayFair
                     panel1.Controls.Clear();
                     createMatrix(5);
                     checkString(5);
+                    check = 5;
                    textBox3.KeyPress += new KeyPressEventHandler(matrix5_KeyPress);
                 }
                 else if (((RadioButton)sender) == radioButton2)
@@ -42,6 +94,7 @@ namespace PlayFair
                     panel1.Controls.Clear();
                     createMatrix(6);
                     checkString(6);
+                    check = 6;
                     textBox3.KeyPress += new KeyPressEventHandler(matrix6_KeyPress);
                 }
             }
@@ -70,6 +123,7 @@ namespace PlayFair
                         btn.Text = Encoding.ASCII.GetString(new byte[] { (byte)charNum });
                     }
                     else { btn.Text = Encoding.ASCII.GetString(new byte[] { (byte)charNum }); }
+                    arrayMatrix[i,j] = btn;
                     //panel add collection
                     panel1.Controls.Add(btn);
                     //reassign button old = btn vua tao
@@ -120,6 +174,7 @@ namespace PlayFair
             textBox3.MaxLength = 36;
             textBox3.SelectionStart = textBox3.Text.Length;//cursor to bottom
             textBox3.Text = textBox3.Text.ToUpper();
+            
         }
 
         void matrix5_KeyPress(object sender, KeyPressEventArgs e)
@@ -132,7 +187,7 @@ namespace PlayFair
             else if (e.KeyChar == (char)8)//accept press backspace
             { e.Handled = false; }
             else
-             e.Handled = true;
+            { e.Handled = true; }
         }
 
         void matrix6_KeyPress(object sender, KeyPressEventArgs e)
@@ -146,6 +201,12 @@ namespace PlayFair
             { e.Handled = false; }
             else
                 e.Handled = true;
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (textBox3.Text != string.Empty)
+                replaceOnMatrix(check, textBox3.Text);
         }
     }
 }
