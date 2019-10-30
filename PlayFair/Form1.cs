@@ -193,7 +193,7 @@ namespace PlayFair
                 {
                     case 5:
                         {
-                            textBox3.Text = Regex.Replace(textBox3.Text, @"[0-9]", "");
+                            textBox3.Text = Regex.Replace(textBox3.Text, @"[0-9jJ]", "");
                             break;
                         }
                     case 6:
@@ -222,7 +222,7 @@ namespace PlayFair
         void matrix5_KeyPress(object sender, KeyPressEventArgs e)
         {
             //only word except j
-            if ((new Regex(@"^[a-zA-Z]+$")).IsMatch(e.KeyChar.ToString()))
+            if ((new Regex(@"[^jJ\W\d]")).IsMatch(e.KeyChar.ToString()))
             {
                 e.Handled = false;
             }
