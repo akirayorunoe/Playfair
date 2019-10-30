@@ -15,8 +15,8 @@ namespace PlayFair
     public partial class Form1 : Form
     {
         int check=5;
-        string tempString="";
         Button[,] arrayMatrix = new Button[6, 6];
+        List<string> alphabet = new List<string>();
         public Form1()
         {
             InitializeComponent();
@@ -51,27 +51,55 @@ namespace PlayFair
            // MessageBox.Show(kq);
             return kq;
         }
+        void modifyMatrix(Button[,] a,int x,int hang,int cot)
+        {
+            //for(int i=0;i< x;i++)
+            //{
+            //    for(int j=0;j< x;j++)
+            //    {
+            while (hang >= 0)
+            {
+                if (cot < 0) { hang--; cot = x; }
+                a[hang, cot].Text = a[hang, cot-1].Text;
+                cot--;
+            }
+            //    }
+            //}
+        }
         void replaceOnMatrix(int x,string a)
         {
             a=distinctString(a);
-            Button[,] arrayMatrixClone = new Button[6,6];
-            Array.Copy(arrayMatrix, 0, arrayMatrixClone, 0, arrayMatrix.Length);
+            // Button[,] arrayMatrixClone = new Button[6, 6];
+            //Array.Copy(arrayMatrix, 0, arrayMatrixClone, 0, arrayMatrix.Length);
+            // arrayMatrixClone = arrayMatrix.Clone() as Button[,];
+            //string s = "";
+            //foreach (string temp in alphabet)
+            //{
+            //    s += temp;
+            //}
+            //MessageBox.Show(s);
             int size = 0;
             int h = 0, t = 0;
-            while (size <= a.Length)
+            while (size < a.Length)
             {
                 for (int i = 0; i < x; i++)
                 {
+                    //int indexOfAlphabet = 0;
                     for (int j = 0; j < x; j++)
                     {
                         if (t >= x) { t = 0; h++; }
+                        if (size >= a.Length) break;
                         string temp1 = a[size].ToString();
-                        string temp2 = arrayMatrix[i, j].Text;
-                        MessageBox.Show(a+","+temp1 + "," + temp2);
-                        if (temp1.Equals(temp2))
+                        foreach (string temp2 in alphabet)
                         {
-                            arrayMatrixClone[h, t++].Text = temp1;
-                            size++;
+                            // MessageBox.Show("Key:"+a + "\n Ký tự đầu" + temp1 + "\n Alphabet:" + temp2 + "\nBằng nhau k?" + temp1.Equals(temp2).ToString() +"\nGiá trị matrix hiện tại"+arrayMatrix[i, j].Text+"\nIndex key hiện tại: "+size.ToString());
+                            if (temp1.Equals(temp2))
+                            {
+                                arrayMatrix[h, t++].Text = temp1;
+                              // arrayMatrix[alphabet.IndexOf(temp2)-size*,]
+                                //modifyMatrix(arrayMatrix, x, i, j);
+                                size++;
+                            }
                         }
                     }
                 }
@@ -108,6 +136,7 @@ namespace PlayFair
         {
             int charNum = 65;
             int offset = 0;
+            alphabet = new List<string>();
             for (int i = 0; i < x; i++)
             {
                 //Moi lan xuong dong tao oldBtn cach oldBtn old 30
@@ -124,8 +153,18 @@ namespace PlayFair
                     {
                         charNum = 48;//0
                         btn.Text = Encoding.ASCII.GetString(new byte[] { (byte)charNum });
+                        alphabet.Add(btn.Text);
                     }
-                    else { btn.Text = Encoding.ASCII.GetString(new byte[] { (byte)charNum }); }
+                    else if(charNum == 74 && x == 5)
+                    {
+                        charNum = 75;
+                        btn.Text = Encoding.ASCII.GetString(new byte[] { (byte)charNum });
+                        alphabet.Add(btn.Text);
+                    }
+                    else {
+                        btn.Text = Encoding.ASCII.GetString(new byte[] { (byte)charNum });
+                        alphabet.Add(btn.Text);
+                    }
                     arrayMatrix[i,j] = btn;
                     //panel add collection
                     panel1.Controls.Add(btn);
@@ -182,7 +221,7 @@ namespace PlayFair
 
         void matrix5_KeyPress(object sender, KeyPressEventArgs e)
         {
-            //only word
+            //only word except j
             if ((new Regex(@"^[a-zA-Z]+$")).IsMatch(e.KeyChar.ToString()))
             {
                 e.Handled = false;
