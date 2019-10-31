@@ -59,7 +59,7 @@ namespace PlayFair
             //    {
             while (hang >= 0)
             {
-                if (cot < 0) { hang--; cot = x; }
+                if (cot < 0) { hang--; cot = x-1; }
                 a[hang, cot].Text = a[hang, cot-1].Text;
                 cot--;
             }
@@ -69,9 +69,6 @@ namespace PlayFair
         void replaceOnMatrix(int x,string a)
         {
             a=distinctString(a);
-            // Button[,] arrayMatrixClone = new Button[6, 6];
-            //Array.Copy(arrayMatrix, 0, arrayMatrixClone, 0, arrayMatrix.Length);
-            // arrayMatrixClone = arrayMatrix.Clone() as Button[,];
             //string s = "";
             //foreach (string temp in alphabet)
             //{
@@ -95,8 +92,39 @@ namespace PlayFair
                             // MessageBox.Show("Key:"+a + "\n Ký tự đầu" + temp1 + "\n Alphabet:" + temp2 + "\nBằng nhau k?" + temp1.Equals(temp2).ToString() +"\nGiá trị matrix hiện tại"+arrayMatrix[i, j].Text+"\nIndex key hiện tại: "+size.ToString());
                             if (temp1.Equals(temp2))
                             {
+                                int indexCol = alphabet.IndexOf(temp2);//cot se bi xoa
+                                int indexRow = Convert.ToInt32(char.Parse(temp2));
                                 arrayMatrix[h, t++].Text = temp1;
-                              // arrayMatrix[alphabet.IndexOf(temp2)-size*,]
+                                indexCol = alphabet.IndexOf(temp2);
+                                while (indexCol > (x-1)) //get index Column
+                                {
+                                    indexCol = indexCol - x;
+                                }
+                                //MessageBox.Show(Convert.ToInt32(char.Parse(temp2)).ToString() + "-" + temp2 + indexRow + "," + indexCol);
+                                switch (x)
+                                {
+                                    case 5:
+                                        {
+                                            if(indexRow>=65 && indexRow <= 69) { indexRow = 0; }
+                                            if (indexRow >= 70 && indexRow <= 75) { indexRow = 1; }//k xet j
+                                            if (indexRow >= 76 && indexRow <= 80) { indexRow = 2; }
+                                            if (indexRow >= 81 && indexRow <= 85) { indexRow = 3; }
+                                            if (indexRow >= 86) { indexRow = 4; }
+                                            break;
+                                        }
+                                    case 6:
+                                        {
+                                            if (indexRow >= 65 && indexRow <=70) { indexRow = 0; }
+                                            if (indexRow >= 71 && indexRow <= 76) { indexRow = 1; }
+                                            if (indexRow >= 77 && indexRow <= 82) { indexRow = 2; }
+                                            if (indexRow >= 83 && indexRow <= 88) { indexRow = 3; }
+                                            if (indexRow >= 89 || indexRow >=48 && indexRow<52) { indexRow = 4; }
+                                            if(indexRow >= 52 && indexRow <=57) { indexRow = 5; }
+                                            break;
+                                        }
+                                }
+                                MessageBox.Show(Convert.ToInt32(char.Parse(temp2)).ToString() +"-"+ temp2+ indexRow+","+ indexCol);
+                                //arrayMatrix[indexRow, indexCol].Text = "";
                                 //modifyMatrix(arrayMatrix, x, i, j);
                                 size++;
                             }
