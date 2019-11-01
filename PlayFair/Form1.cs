@@ -51,24 +51,64 @@ namespace PlayFair
            // MessageBox.Show(kq);
             return kq;
         }
-        void modifyMatrix(Button[,] a,int x,int hang,int cot)
+        void modifyMatrix(Button[,] a,int x,int row,int col,string s)
         {
-            //for(int i=0;i< x;i++)
-            //{
-            //    for(int j=0;j< x;j++)
-            //    {
-            while (hang >= 0)
+            bool firstLoop = false;
+            int dem = 0;
+            List<string> newList = new List<string>(alphabet);
+            foreach (char c in s)
+                {
+                newList.Remove(c.ToString());
+                }
+            for (int i = row; i < x; i++)
             {
-                if (cot < 0) { hang--; cot = x-1; }
-                a[hang, cot].Text = a[hang, cot-1].Text;
-                cot--;
+                if (!firstLoop)
+                {
+                    for (int j = col; j < x; j++)
+                    {
+                        a[i, j].Text = newList.ElementAt(dem++);
+                        //MessageBox.Show(a[i, j].Text + "\n(row,col): " + i + "," + j);
+                    }
+                    firstLoop = true;
+                }
+                else
+                {
+                    for (int j = 0; j < x; j++)
+                    {
+                        a[i, j].Text = newList.ElementAt(dem++);
+                       // MessageBox.Show(a[i, j].Text + "\n(row,col): " + i + "," + j);
+                    }
+                }
             }
-            //    }
-            //}
+
         }
+
+        void Encrypt(int x)
+        {
+            if (textBox1.Text != string.Empty/* && textBox3.Text != string.Empty*/)
+            {
+                //to uppercase 
+                string eString = textBox1.Text.ToUpper();
+                //odd string
+                if(eString.Length %2 != 0)
+                {
+                    eString += 'X';
+                }
+                
+                if (x == 5) {
+                    eString = Regex.Replace(eString,@"[\W\d]", "");//replace all num and non-letter
+                    eString = Regex.Replace(eString, @"[jJ]", "I");//replace j to i
+
+                }
+                if (x == 6) { eString = Regex.Replace(eString, @"[\W]", ""); }//replace all non-letter
+                MessageBox.Show(eString);
+            }
+           
+        }
+
         void replaceOnMatrix(int x,string a)
         {
-            a=distinctString(a);
+            a = distinctString(a);
             //string s = "";
             //foreach (string temp in alphabet)
             //{
@@ -77,6 +117,8 @@ namespace PlayFair
             //MessageBox.Show(s);
             int size = 0;
             int h = 0, t = 0;
+            int indexCol=0;
+            int indexRow=0;
             while (size < a.Length)
             {
                 for (int i = 0; i < x; i++)
@@ -92,10 +134,9 @@ namespace PlayFair
                             // MessageBox.Show("Key:"+a + "\n Ký tự đầu" + temp1 + "\n Alphabet:" + temp2 + "\nBằng nhau k?" + temp1.Equals(temp2).ToString() +"\nGiá trị matrix hiện tại"+arrayMatrix[i, j].Text+"\nIndex key hiện tại: "+size.ToString());
                             if (temp1.Equals(temp2))
                             {
-                                int indexCol = alphabet.IndexOf(temp2);//cot se bi xoa
-                                int indexRow = Convert.ToInt32(char.Parse(temp2));
+                                 indexCol = alphabet.IndexOf(temp2);//cot se bi xoa
+                                indexRow = Convert.ToInt32(char.Parse(temp2));
                                 arrayMatrix[h, t++].Text = temp1;
-                                indexCol = alphabet.IndexOf(temp2);
                                 while (indexCol > (x-1)) //get index Column
                                 {
                                     indexCol = indexCol - x;
@@ -123,16 +164,17 @@ namespace PlayFair
                                             break;
                                         }
                                 }
-                                MessageBox.Show(Convert.ToInt32(char.Parse(temp2)).ToString() +"-"+ temp2+ indexRow+","+ indexCol);
+                               // MessageBox.Show(Convert.ToInt32(char.Parse(temp2)).ToString() +"-"+ temp2+ indexRow+","+ indexCol);
                                 //arrayMatrix[indexRow, indexCol].Text = "";
-                                //modifyMatrix(arrayMatrix, x, i, j);
+                               
                                 size++;
                             }
                         }
                     }
                 }
             }
-
+            //MessageBox.Show(arrayMatrix[h, t-1].Text+h+","+(t-1)); 
+            modifyMatrix(arrayMatrix, x, h, t, a);
         }
         private void radioButtons_CheckedChanged(object sender, EventArgs e)
         {
@@ -277,6 +319,11 @@ namespace PlayFair
         {
             if (textBox3.Text != string.Empty)
                 replaceOnMatrix(check, textBox3.Text);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Encrypt(check);
         }
     }
 }
