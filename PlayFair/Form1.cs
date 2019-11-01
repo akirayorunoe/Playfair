@@ -15,6 +15,7 @@ namespace PlayFair
     public partial class Form1 : Form
     {
         int check=5;
+        bool submit = false;
         Button[,] arrayMatrix = new Button[6, 6];
         List<string> alphabet = new List<string>();
         public Form1()
@@ -25,16 +26,6 @@ namespace PlayFair
             //check khi onclick radio btn
             radioButton1.CheckedChanged += new EventHandler(radioButtons_CheckedChanged);
             radioButton2.CheckedChanged += new EventHandler(radioButtons_CheckedChanged);
-            //string s="";
-            //for(int i=0;i<5;i++)
-            //{
-            //    for(int j=0;j<5;j++)
-            //    {
-            //        s += arrayMatrix[i, j].Text.ToString();
-            //    }
-            //    s += "\n";
-            //}
-            //MessageBox.Show(s);
         }
         string distinctString(string a)
         {
@@ -50,6 +41,29 @@ namespace PlayFair
             kq = string.Join("", distinct.ToArray());
            // MessageBox.Show(kq);
             return kq;
+        }
+        public static string RemoveUnicode(string text)
+        {
+            string[] arr1 = new string[] { "á", "à", "ả", "ã", "ạ", "â", "ấ", "ầ", "ẩ", "ẫ", "ậ", "ă", "ắ", "ằ", "ẳ", "ẵ", "ặ",
+    "đ",
+    "é","è","ẻ","ẽ","ẹ","ê","ế","ề","ể","ễ","ệ",
+    "í","ì","ỉ","ĩ","ị",
+    "ó","ò","ỏ","õ","ọ","ô","ố","ồ","ổ","ỗ","ộ","ơ","ớ","ờ","ở","ỡ","ợ",
+    "ú","ù","ủ","ũ","ụ","ư","ứ","ừ","ử","ữ","ự",
+    "ý","ỳ","ỷ","ỹ","ỵ",};
+            string[] arr2 = new string[] { "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a",
+    "d",
+    "e","e","e","e","e","e","e","e","e","e","e",
+    "i","i","i","i","i",
+    "o","o","o","o","o","o","o","o","o","o","o","o","o","o","o","o","o",
+    "u","u","u","u","u","u","u","u","u","u","u",
+    "y","y","y","y","y",};
+            for (int i = 0; i < arr1.Length; i++)
+            {
+                text = text.Replace(arr1[i], arr2[i]);
+                text = text.Replace(arr1[i].ToUpper(), arr2[i].ToUpper());
+            }
+            return text;
         }
         void modifyMatrix(Button[,] a,int x,int row,int col,string s)
         {
@@ -83,38 +97,31 @@ namespace PlayFair
 
         }
 
-        void Encrypt(int x)
+        string plainTextModify(int x)
         {
             if (textBox1.Text != string.Empty/* && textBox3.Text != string.Empty*/)
             {
                 //to uppercase 
                 string eString = textBox1.Text.ToUpper();
+                eString = RemoveUnicode(eString);
+                if (x == 5) {
+                    eString = Regex.Replace(eString,@"[\W\d]", "");//replace all num and non-letter
+                    eString = Regex.Replace(eString, @"[jJ]", "I");//replace j to i
+                }
+                if (x == 6) { eString = Regex.Replace(eString, @"[\W]", ""); }//replace all non-letter
                 //odd string
                 if(eString.Length %2 != 0)
                 {
                     eString += 'X';
                 }
-                
-                if (x == 5) {
-                    eString = Regex.Replace(eString,@"[\W\d]", "");//replace all num and non-letter
-                    eString = Regex.Replace(eString, @"[jJ]", "I");//replace j to i
-
-                }
-                if (x == 6) { eString = Regex.Replace(eString, @"[\W]", ""); }//replace all non-letter
-                MessageBox.Show(eString);
+                return eString;
             }
-           
+            return "";
         }
 
         void replaceOnMatrix(int x,string a)
         {
             a = distinctString(a);
-            //string s = "";
-            //foreach (string temp in alphabet)
-            //{
-            //    s += temp;
-            //}
-            //MessageBox.Show(s);
             int size = 0;
             int h = 0, t = 0;
             int indexCol=0;
@@ -123,7 +130,6 @@ namespace PlayFair
             {
                 for (int i = 0; i < x; i++)
                 {
-                    //int indexOfAlphabet = 0;
                     for (int j = 0; j < x; j++)
                     {
                         if (t >= x) { t = 0; h++; }
@@ -131,8 +137,7 @@ namespace PlayFair
                         string temp1 = a[size].ToString();
                         foreach (string temp2 in alphabet)
                         {
-                            // MessageBox.Show("Key:"+a + "\n Ký tự đầu" + temp1 + "\n Alphabet:" + temp2 + "\nBằng nhau k?" + temp1.Equals(temp2).ToString() +"\nGiá trị matrix hiện tại"+arrayMatrix[i, j].Text+"\nIndex key hiện tại: "+size.ToString());
-                            if (temp1.Equals(temp2))
+                           if (temp1.Equals(temp2))
                             {
                                  indexCol = alphabet.IndexOf(temp2);//cot se bi xoa
                                 indexRow = Convert.ToInt32(char.Parse(temp2));
@@ -141,8 +146,7 @@ namespace PlayFair
                                 {
                                     indexCol = indexCol - x;
                                 }
-                                //MessageBox.Show(Convert.ToInt32(char.Parse(temp2)).ToString() + "-" + temp2 + indexRow + "," + indexCol);
-                                switch (x)
+                               switch (x)
                                 {
                                     case 5:
                                         {
@@ -164,16 +168,12 @@ namespace PlayFair
                                             break;
                                         }
                                 }
-                               // MessageBox.Show(Convert.ToInt32(char.Parse(temp2)).ToString() +"-"+ temp2+ indexRow+","+ indexCol);
-                                //arrayMatrix[indexRow, indexCol].Text = "";
-                               
                                 size++;
                             }
                         }
                     }
                 }
             }
-            //MessageBox.Show(arrayMatrix[h, t-1].Text+h+","+(t-1)); 
             modifyMatrix(arrayMatrix, x, h, t, a);
         }
         private void radioButtons_CheckedChanged(object sender, EventArgs e)
@@ -188,7 +188,10 @@ namespace PlayFair
                     createMatrix(5);
                     checkString(5);
                     check = 5;
-                   textBox3.KeyPress += new KeyPressEventHandler(matrix5_KeyPress);
+                    submit = false;
+                    textBox3.Text = "";
+                    textBox2.Text = "";
+                    textBox3.KeyPress += new KeyPressEventHandler(matrix5_KeyPress);
                 }
                 else if (((RadioButton)sender) == radioButton2)
                 {
@@ -196,6 +199,9 @@ namespace PlayFair
                     createMatrix(6);
                     checkString(6);
                     check = 6;
+                    submit = false;
+                    textBox3.Text = "";
+                    textBox2.Text = "";
                     textBox3.KeyPress += new KeyPressEventHandler(matrix6_KeyPress);
                 }
             }
@@ -283,6 +289,7 @@ namespace PlayFair
 
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
+            textBox3.Text = RemoveUnicode(textBox3.Text);
             textBox3.MaxLength = 36;
             textBox3.SelectionStart = textBox3.Text.Length;//cursor to bottom
             textBox3.Text = textBox3.Text.ToUpper();
@@ -317,13 +324,127 @@ namespace PlayFair
 
         private void button5_Click(object sender, EventArgs e)
         {
+            submit = true;
             if (textBox3.Text != string.Empty)
                 replaceOnMatrix(check, textBox3.Text);
         }
 
+        int checkRow(char a,int x)
+        {
+            string str = a.ToString();
+            for (int i = 0; i < x; i++)
+            {
+                for (int j = 0; j < x; j++)
+                {
+                    if(arrayMatrix[i,j].Text == str)
+                    {
+                        return i;
+                    }
+                }
+            }
+            return -1;
+        }
+        int checkCol(char a, int x)
+        {
+            string str = a.ToString();
+            for (int i = 0; i < x; i++)
+            {
+                for (int j = 0; j < x; j++)
+                {
+                    if (arrayMatrix[i, j].Text == str)
+                    {
+                        return j;
+                    }
+                }
+            }
+            return -1;
+        }
+        string Encrypt(int x,string a)
+        {
+            string kq = "";
+            int r0 = checkRow(a[0],x);
+            int c0 = checkCol(a[0],x);
+            int r1 = checkRow(a[1],x);
+            int c1 = checkCol(a[1],x);
+            //If both the letters are in the same column: Take the letter below each one (going back to the top if at the bottom).
+            //MessageBox.Show(a+"(" + r0 + "," + c0 + ")" + "\n" + "(" + r1 + "," + c1 + ")");
+            if (c0 == c1)
+            {
+                if ((r0 + 1) >= x) { r0 = -1; }
+                if ((r1 + 1) >= x) { r1 = -1; }
+                kq += arrayMatrix[r0 + 1, c0].Text;
+                kq += arrayMatrix[r1 + 1, c0].Text;
+               // MessageBox.Show(arrayMatrix[r0 + 1, c0].Text+ arrayMatrix[r1 + 1, c0].Text);
+            }
+            //If both the letters are in the same row: Take the letter to the right of each one 
+            //(going back to the leftmost if at the rightmost position).
+            else if (r0 == r1)
+            {
+                if ((c0 + 1) >= x) { c0 = -1; }
+                if ((c1 + 1) >= x) { c1 = -1; }
+                kq += arrayMatrix[r0 , c0+1].Text;
+                kq += arrayMatrix[r0, c1+1].Text;
+               // MessageBox.Show(arrayMatrix[r0, c0 + 1].Text+arrayMatrix[r0, c1 + 1].Text);
+            }
+            //If neither of the above rules is true: Form a rectangle with the two letters and take the 
+            //letters on the horizontal opposite corner of the rectangle.
+            else
+            {
+                //chieu dai hcn
+                int hC = Math.Abs(c1 - c0);
+                //chieu rong hcn
+                //int hC = Math.Abs(c1 - c0);
+                if((c0 + hC) >= x) {
+                    c0 = -c0;
+                    kq += arrayMatrix[Math.Abs(r0), Math.Abs(c0 + hC)].Text;
+                    kq += arrayMatrix[Math.Abs(r1), Math.Abs(c1+hC)].Text;
+                }
+                else if ((c1 + hC) >= x)
+                {
+                    c1 = -c1;
+                    kq += arrayMatrix[Math.Abs(r0), Math.Abs(c0 + hC)].Text;
+                    kq += arrayMatrix[Math.Abs(r1), Math.Abs(c1 + hC)].Text;
+                }
+                else
+                {
+                    kq += arrayMatrix[Math.Abs(r0), Math.Abs(c0 + hC)].Text;
+                    kq += arrayMatrix[Math.Abs(r1), Math.Abs(c1 - hC)].Text;
+                }
+                //MessageBox.Show(arrayMatrix[Math.Abs(r0 + hR), Math.Abs(c0 + hC)].Text+arrayMatrix[Math.Abs(r1 + hR), Math.Abs(c1 + hC)].Text);
+            }
+            return kq;
+        }
+        List<string> splitPair(string text)
+        {
+            int curr = 0;
+            List<string> cypherText = new List<string>();
+            while (curr != text.Length)
+            {
+                string s = "";
+                int dem = 0;
+                for (; curr < text.Length; curr++)
+                {
+                    if (dem >= 2) break;
+                    s += text[curr];
+                    dem++;
+                }
+                cypherText.Add(s);
+            }
+            return cypherText;
+        }
         private void button2_Click(object sender, EventArgs e)
         {
-            Encrypt(check);
+            if (!submit) return;
+            //chinh sua cyphertext ve dung dang
+            string text = plainTextModify(check);
+            //chia nho theo pair cyphertext
+            List<string> cypherText = splitPair(text);
+            string t = "";
+            foreach(string a in cypherText)
+            {
+               t+=Encrypt(check,a);
+            }
+            textBox2.Text = t;
         }
     }
 }
