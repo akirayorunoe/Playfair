@@ -15,7 +15,6 @@ namespace PlayFair
     public partial class Form1 : Form
     {
         int check=5;
-        bool submit = false;
         Button[,] arrayMatrix = new Button[6, 6];
         List<string> alphabet = new List<string>();
         public Form1()
@@ -188,7 +187,6 @@ namespace PlayFair
                     createMatrix(5);
                     checkString(5);
                     check = 5;
-                    submit = false;
                     textBox3.Text = "";
                     textBox2.Text = "";
                     textBox3.KeyPress += new KeyPressEventHandler(matrix5_KeyPress);
@@ -199,7 +197,6 @@ namespace PlayFair
                     createMatrix(6);
                     checkString(6);
                     check = 6;
-                    submit = false;
                     textBox3.Text = "";
                     textBox2.Text = "";
                     textBox3.KeyPress += new KeyPressEventHandler(matrix6_KeyPress);
@@ -324,7 +321,6 @@ namespace PlayFair
 
         private void button5_Click(object sender, EventArgs e)
         {
-            submit = true;
             if (textBox3.Text != string.Empty)
                 replaceOnMatrix(check, textBox3.Text);
         }
@@ -414,6 +410,64 @@ namespace PlayFair
             }
             return kq;
         }
+
+        string Decrypt(int x, string a)
+        {
+            string kq = "";
+            int r0 = checkRow(a[0], x);
+            int c0 = checkCol(a[0], x);
+            int r1 = checkRow(a[1], x);
+            int c1 = checkCol(a[1], x);
+            //If both the letters are in the same column: Take the letter below each one (going back to the top if at the bottom).
+            //MessageBox.Show(a+"(" + r0 + "," + c0 + ")" + "\n" + "(" + r1 + "," + c1 + ")");
+            if (c0 == c1)
+            {
+                if ((r0 - 1) <0) { r0 = x; }
+                if ((r1 - 1) <0) { r1 = x; }
+                kq += arrayMatrix[r0 - 1, c0].Text;
+                kq += arrayMatrix[r1 - 1, c0].Text;
+                // MessageBox.Show(arrayMatrix[r0 + 1, c0].Text+ arrayMatrix[r1 + 1, c0].Text);
+            }
+            //If both the letters are in the same row: Take the letter to the right of each one 
+            //(going back to the leftmost if at the rightmost position).
+            else if (r0 == r1)
+            {
+                if ((c0 - 1) <0) { c0 = x; }
+                if ((c1 - 1) <0) { c1 = x; }
+                kq += arrayMatrix[r0, c0 - 1].Text;
+                kq += arrayMatrix[r0, c1 - 1].Text;
+                // MessageBox.Show(arrayMatrix[r0, c0 + 1].Text+arrayMatrix[r0, c1 + 1].Text);
+            }
+            //If neither of the above rules is true: Form a rectangle with the two letters and take the 
+            //letters on the horizontal opposite corner of the rectangle.
+            else
+            {
+                //chieu dai hcn
+                int hC = Math.Abs(c1 - c0);
+                //chieu rong hcn
+                //int hC = Math.Abs(c1 - c0);
+                if ((c0 + hC) >= x)
+                {
+                    c0 = -c0;
+                    kq += arrayMatrix[Math.Abs(r0), Math.Abs(c0 + hC)].Text;
+                    kq += arrayMatrix[Math.Abs(r1), Math.Abs(c1 + hC)].Text;
+                }
+                else if ((c1 + hC) >= x)
+                {
+                    c1 = -c1;
+                    kq += arrayMatrix[Math.Abs(r0), Math.Abs(c0 + hC)].Text;
+                    kq += arrayMatrix[Math.Abs(r1), Math.Abs(c1 + hC)].Text;
+                }
+                else
+                {
+                    kq += arrayMatrix[Math.Abs(r0), Math.Abs(c0 - hC)].Text;
+                    kq += arrayMatrix[Math.Abs(r1), Math.Abs(c1 + hC)].Text;
+                }
+                //MessageBox.Show(arrayMatrix[Math.Abs(r0 + hR), Math.Abs(c0 + hC)].Text+arrayMatrix[Math.Abs(r1 + hR), Math.Abs(c1 + hC)].Text);
+            }
+            return kq;
+        }
+
         List<string> splitPair(string text)
         {
             int curr = 0;
@@ -434,7 +488,6 @@ namespace PlayFair
         }
         private void button2_Click(object sender, EventArgs e)
         {
-            if (!submit) return;
             //chinh sua cyphertext ve dung dang
             string text = plainTextModify(check);
             //chia nho theo pair cyphertext
@@ -443,6 +496,20 @@ namespace PlayFair
             foreach(string a in cypherText)
             {
                t+=Encrypt(check,a);
+            }
+            textBox2.Text = t;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //chinh sua cyphertext ve dung dang
+            string text = plainTextModify(check);
+            //chia nho theo pair cyphertext
+            List<string> cypherText = splitPair(text);
+            string t = "";
+            foreach (string a in cypherText)
+            {
+                t += Decrypt(check, a);
             }
             textBox2.Text = t;
         }
