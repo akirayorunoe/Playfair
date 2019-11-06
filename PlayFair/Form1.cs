@@ -403,8 +403,14 @@ namespace PlayFair
                 }
                 else
                 {
-                    kq += arrayMatrix[Math.Abs(r0), Math.Abs(c0 + hC)].Text;
-                    kq += arrayMatrix[Math.Abs(r1), Math.Abs(c1 - hC)].Text;
+                    if (c0 < c1)
+                    {
+                        kq += arrayMatrix[Math.Abs(r0), Math.Abs(c0 + hC)].Text;
+                        kq += arrayMatrix[Math.Abs(r1), Math.Abs(c1 - hC)].Text;
+                    }
+                    else
+                        kq += arrayMatrix[Math.Abs(r0), Math.Abs(c0 - hC)].Text;
+                    kq += arrayMatrix[Math.Abs(r1), Math.Abs(c1 + hC)].Text;
                 }
                 //MessageBox.Show(arrayMatrix[Math.Abs(r0 + hR), Math.Abs(c0 + hC)].Text+arrayMatrix[Math.Abs(r1 + hR), Math.Abs(c1 + hC)].Text);
             }
@@ -460,8 +466,16 @@ namespace PlayFair
                 }
                 else
                 {
-                    kq += arrayMatrix[Math.Abs(r0), Math.Abs(c0 - hC)].Text;
-                    kq += arrayMatrix[Math.Abs(r1), Math.Abs(c1 + hC)].Text;
+                    if (c0 > c1)
+                    {
+                        kq += arrayMatrix[Math.Abs(r0), Math.Abs(c0 - hC)].Text;
+                        kq += arrayMatrix[Math.Abs(r1), Math.Abs(c1 + hC)].Text;
+                    }
+                   else
+                    {
+                        kq += arrayMatrix[Math.Abs(r0), Math.Abs(c0 + hC)].Text;
+                        kq += arrayMatrix[Math.Abs(r1), Math.Abs(c1 - hC)].Text;
+                    }
                 }
                 //MessageBox.Show(arrayMatrix[Math.Abs(r0 + hR), Math.Abs(c0 + hC)].Text+arrayMatrix[Math.Abs(r1 + hR), Math.Abs(c1 + hC)].Text);
             }
